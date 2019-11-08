@@ -24,16 +24,18 @@ namespace ConsoleOutputEngine
         {
             WhitePixelValue = whitePixelValue;
 
-            ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd.exe")
+            ProcessStartInfo procStartInfo = new ProcessStartInfo("coes.exe")
             {
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
-                UseShellExecute = false
+                UseShellExecute = false,
+                CreateNoWindow = false
             };
 
             _process = Process.Start(procStartInfo);
 
+            Console.SetIn(_process.StandardOutput);
             Console.SetOut(_process.StandardInput);
         }
 
@@ -53,20 +55,21 @@ namespace ConsoleOutputEngine
             {
                 while (currentPosY < pixelLine.Key)
                 {
-                    Console.WriteLine();
+                    EndLine(ref currentPosY);
                 }
 
                 foreach (var pixel in pixelLine)
                 {
                     while (currentPosX < pixel.PosX)
                     {
-                        RenderPixel(WhitePixelValue);
+                        RenderPixel(WhitePixelValue, ref currentPosX);
                     }
 
-                    RenderPixel(pixel.Value);
+                    RenderPixel(pixel.Value, ref currentPosX);
                 }
 
-                Console.WriteLine();
+                EndLine(ref currentPosY);
+                currentPosX = 0;
             }
         }
 
@@ -75,12 +78,20 @@ namespace ConsoleOutputEngine
             Console.Clear();
         }
 
-        private void RenderPixel(char pixelValue)
+        private void RenderPixel(char pixelValue, ref int currentPosX)
         {
             for (int i = 0; i < _pixelThicc; i++)
             {
                 Console.Write(pixelValue);
             }
+
+            currentPosX++;
+        }
+
+        private void EndLine(ref int currentPosY)
+        {
+            Console.WriteLine();
+            currentPosY++;
         }
 
         public void Dispose()
