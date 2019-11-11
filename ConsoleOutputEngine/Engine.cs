@@ -12,31 +12,41 @@ namespace ConsoleOutputEngine
     {
         private Process _process;
         private int _pixelThicc = 2;
-        
+
         public char WhitePixelValue { get; }
 
-        public Engine(): this(' ')
+        public Engine() : this(' ')
         {
-            
+
         }
 
         public Engine(char whitePixelValue)
         {
             WhitePixelValue = whitePixelValue;
 
+            //ProcessStartInfo procStartInfo = new ProcessStartInfo("coes.exe")
+            //{
+            //    RedirectStandardError = true,
+            //    RedirectStandardInput = true,
+            //    RedirectStandardOutput = true,
+            //    UseShellExecute = false,
+            //    CreateNoWindow = false
+            //};
+
             ProcessStartInfo procStartInfo = new ProcessStartInfo("coes.exe")
             {
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
+                RedirectStandardError = false,
+                RedirectStandardInput = false,
+                RedirectStandardOutput = false,
+                UseShellExecute = true,
                 CreateNoWindow = false
             };
 
-            _process = Process.Start(procStartInfo);
+            _process = new Process();
+            _process.StartInfo = procStartInfo;
 
-            Console.SetIn(_process.StandardOutput);
-            Console.SetOut(_process.StandardInput);
+            //Console.SetIn(_process.StandardOutput);
+            //Console.SetOut(_process.StandardInput);
         }
 
         public void Render(IEnumerable<Pixel> pixelMap)

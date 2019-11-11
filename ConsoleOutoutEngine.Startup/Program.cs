@@ -28,10 +28,11 @@ namespace ConsoleOutoutEngine.Startup
             #endregion
 
             bool doStopApp = false;
+            ConsoleKeyInfo key;
 
             while (!doStopApp)
             {
-                var key = Console.ReadKey(true);
+                key = Console.ReadKey(true);
 
                 if ((key.Modifiers & ConsoleModifiers.Control) != 0 &&
                     (key.Key & ConsoleKey.C) != 0)
